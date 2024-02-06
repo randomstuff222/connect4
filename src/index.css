@@ -153,6 +153,7 @@ Menus (main and pause)
 */
 
 .menu {
+  position: relative;
   display: grid;
   place-items: center;
   row-gap: 4.9375rem;
@@ -177,6 +178,23 @@ Menus (main and pause)
   text-align: left;
 }
 
+.menu-header-link {
+  cursor: pointer;
+  font-size: var(--ft-heading-m);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-m);
+  width: 20.94rem;
+  height: 4.5rem;
+  border-radius: var(--radius20);
+  border: var(--border);
+  box-shadow: var(--box-shadow1);
+  padding: 0.81rem 1.25rem;
+  transition: var(--transition1);
+  text-transform: uppercase;
+  text-align: left;
+}
+
+
 .menu-link-unavailable {
   cursor: pointer;
   font-size: var(--ft-heading-m);
@@ -191,6 +209,26 @@ Menus (main and pause)
   transition: var(--transition1);
   text-transform: uppercase;
   text-align: left;
+}
+.menu-header-btn {
+  cursor: pointer;
+  width: 6.75rem;
+  height: 2.4375rem;
+  background-color: var(--clr-teal);
+  box-shadow: var(--box-shadow1);
+  color: var(--clr-black);
+  font-size: var(--ft-heading-xs);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-xs);
+  border-radius: var(--radius20);
+  border: var(--border);
+  transition: var(--transition1);
+  text-transform: uppercase;
+}
+
+.menu-header-btn:hover{
+  box-shadow: var(--box-shadow3);
+  color: var(--clr-white);
 }
 
 .button-unavailable::after {

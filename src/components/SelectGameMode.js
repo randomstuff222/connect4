@@ -1,28 +1,41 @@
 import Logo from "./Logo";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-// import PlayVCpuIcon from "../assets/images/player-vs-cpu.svg";
-import PlayVCpuIcon from "../assets/images/pc-monitor-svgrepo-com.svg";
-// import PlayVPlayIcon from "../assets/images/player-vs-player.svg";
 import PlayVPlayIcon from "../assets/images/fight-svgrepo-com.svg";
-import PlayVPlayIconHover from "../assets/images/fight-svgrepo-com-hover.svg";
+import OnlineIcon from "../assets/images/network-utilities-svgrepo-com.svg";
 import NotAvailable from "../assets/images/unavailable-svgrepo-com.svg";
+import LocalHover from "../assets/images/location-pin-svgrepo-com-hover.svg";
+import Local from "../assets/images/location-pin-svgrepo-com.svg";
 import { useGlobalContext } from "../context";
 
 const GameMode = () => {
   const { computerOpponent, humanOpponent } = useGlobalContext();
   let [fightIcon, setFightIcon] = useState(PlayVPlayIcon);
   function MouseOverFight() {
-    setFightIcon(PlayVPlayIconHover);
+    setFightIcon(LocalHover);
   }
   function MouseOutFight(){
-    setFightIcon(PlayVPlayIcon);
+    setFightIcon(Local);
   }
 
   return (
     <div className="menu">
+      <Link
+       to='/'
+       className=" menu-header-btn" 
+       style={{display: 'flex',
+          position: 'absolute',
+          left: '5%',
+          top: '5%',
+          'justify-content': 'center',
+          'align-items': 'center'}}>
+        back
+      </Link>
       <Logo />
       <div>
+      {/* <button className="game-screen-btn" >
+        Back
+      </button> */}
         {/* Player vs Cpu button when this feature is added */}
         <div className="button-unavailable" style={{position: 'relative'}}>
         <img
@@ -38,7 +51,7 @@ const GameMode = () => {
           >
             online
             <img
-              src={PlayVCpuIcon}
+              src={OnlineIcon}
               alt="player vs cpu icon"
               className="menu-link-icon"
             />
@@ -52,7 +65,7 @@ const GameMode = () => {
           onMouseEnter={MouseOverFight}
           onMouseLeave={MouseOutFight}
         >
-          play vs player
+          Local
           <img
             src={fightIcon}
             alt="player vs player icon"
