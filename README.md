@@ -41,10 +41,6 @@ Users should be able to:
 
 ![](/connect_four_thumb.png)
 
-### Links
-
-- Solution URL: [https://github.com/MSPayneII/FEM_Connect_Four](https://github.com/MSPayneII/FEM_Connect_Four)
-- Live Site URL: [https://mpayneii-connect-four.netlify.app/](https://mpayneii-connect-four.netlify.app/)
 
 ## My process
 
