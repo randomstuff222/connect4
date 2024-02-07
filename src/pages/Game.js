@@ -16,8 +16,9 @@ const Game = () => {
   useEffect(() => {
     if(isWinnerDeclared){
       let winner = displayWinnerName();
-      winner === "you" || winner ==="player 1" ? document.querySelector("body").style.backgroundColor = '#fd6687'
-      : document.querySelector("body").style.backgroundColor = '#ffce67';
+      if(winner === "you" || winner ==="player 1") document.querySelector("body").style.backgroundColor = '#fd6687';
+      if(winner ==="player 2") document.querySelector("body").style.backgroundColor = '#ffce67';
+      else document.querySelector("body").style.backgroundColor = '#008080';
     }else{
       document.querySelector("body").style.backgroundColor = '#008080';
     }
