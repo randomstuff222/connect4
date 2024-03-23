@@ -21,8 +21,14 @@ const CpuGame = () => {
     recentMove,
   } = useGlobalContext();
 
+  // delay to get cpu response but wait for the board to load state before playing the received piece
+  const delay = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
+
   const [cpuMove, setCpuMove] = useState(null);
   const [newMess, setNewMess] = useState(false);
+
+  document.querySelector("body").style.backgroundColor = '#008080';
+
   const socket = useSocket();
 
   useEffect(() => {
@@ -45,6 +51,7 @@ const CpuGame = () => {
 
   useEffect(() => {
     if(newMess){
+      delay();
       cpuPlay(cpuMove);
     }
     }, [newMess]
@@ -61,7 +68,7 @@ const CpuGame = () => {
  
       socket.send(JSON.stringify(data));
     }
-  }, [isRedTurn, isWinnerDeclared]);
+  }, [isRedTurn]);
 
   useEffect(() => {
     const handleUnload = (event) => {
