@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 
 const PauseMenuModal = () => {
   const { isPauseMenuOpen, closePauseMenu, restartGame } = useGlobalContext();
+  const quitGame = () => {
+    restartGame();
+    closePauseMenu();
+  }
 
   return (
     <div
@@ -29,7 +33,7 @@ const PauseMenuModal = () => {
           <Link
             to="/"
             className="menu-link pause-menu-link text-center pink-bg-clr white-text-clr"
-            onClick={closePauseMenu}
+            onClick={quitGame}
           >
             quit game
           </Link>

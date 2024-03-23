@@ -46,6 +46,13 @@ const reducer = (state, action) => {
       pieces: newArr,
     };
   }
+  if (action.type === "UPDATE_RECENT_MOVE") {
+    let index = action.payload.index;
+    return {
+      ...state,
+      recentMove: [index, action.payload.player],
+    };
+  }
   if (action.type === "DECLARE_WINNER") {
     return {
       ...state,
@@ -85,6 +92,13 @@ const reducer = (state, action) => {
     };
   }
 
+  if (action.type === "UPDATE_TURN_STATE") {
+    return {
+      ...state,
+      isRedTurn: !state.isRedTurn,
+    }
+  }
+
   if (action.type === "START_NEW_GAME") {
     return {
       ...state,
@@ -94,14 +108,19 @@ const reducer = (state, action) => {
       isAnimationInProgress: false,
       isWinnerDeclared: false,
       isDraw: false,
+      recentMove: [0,0],
       pieces: [
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       ],
+      nbGame: 0,
+      width: 7,
+      height: 6,
     };
   }
   if (action.type === "RESTART_GAME") {
     return {
+      isComputerPlaying: state.isComputerPlaying,
       isGameRulesOpen: false,
       isPauseMenuOpen: false,
       // isComputerPlaying: state.isComputerPlaying ? true : false,
@@ -112,10 +131,14 @@ const reducer = (state, action) => {
       isAnimationInProgress: false,
       isWinnerDeclared: false,
       isDraw: false,
+      recentMove: [0,0],
       pieces: [
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       ],
+      nbGame: 0,
+      width: 7,
+      height: 6,
     };
   }
   throw new Error("no matching action type");

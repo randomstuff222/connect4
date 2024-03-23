@@ -19,61 +19,61 @@ const GameMode = () => {
   }
 
   return (
-    <div className="menu">
-      <Link
-       to='/'
-       className=" menu-header-btn" 
-       style={{display: 'flex',
-          position: 'absolute',
-          left: '5%',
-          top: '5%',
-          'justify-content': 'center',
-          'align-items': 'center'}}>
-        back
-      </Link>
-      <Logo />
-      <div>
-      {/* <button className="game-screen-btn" >
-        Back
-      </button> */}
-        {/* Player vs Cpu button when this feature is added */}
-        <div className="button-unavailable" style={{position: 'relative'}}>
-        <img
-              src={NotAvailable}
-              alt="not available"
-              className="menu-link-icon"
-              style={{position: 'absolute', left:"40%", top: "20%"}}
-            />
+      <div className="menu">
+        <Link
+        to='/'
+        className=" menu-header-btn" 
+        style={{display: 'flex',
+            position: 'absolute',
+            left: '5%',
+            top: '5%',
+            justifyContent: 'center',
+            alignItems: 'center'}}>
+          back
+        </Link>
+        <Logo />
+        <div>
+        {/* <button className="game-screen-btn" >
+          Back
+        </button> */}
+          {/* Player vs Cpu button when this feature is added */}
+          <div className="button-unavailable" style={{position: 'relative'}}>
+          <img
+                src={NotAvailable}
+                alt="not available"
+                className="menu-link-icon"
+                style={{position: 'absolute', left:"40%", top: "20%"}}
+              />
+            <Link
+              to="#"
+              className="menu-link-unavailable gray-bg-clr gray-text-clr"
+              onClick={computerOpponent}
+            >
+              online
+              <img
+                src={OnlineIcon}
+                alt="player vs cpu icon"
+                className="menu-link-icon"
+              />
+            </Link>
+          </div>
+
           <Link
-            to="#"
-            className="menu-link-unavailable gray-bg-clr gray-text-clr"
-            onClick={computerOpponent}
+            to="/gamescreen"
+            className="menu-link rufeus-bg-clr black-text-clr"
+            onClick={humanOpponent}
+            onMouseEnter={MouseOverFight}
+            onMouseLeave={MouseOutFight}
           >
-            online
+            Local
             <img
-              src={OnlineIcon}
-              alt="player vs cpu icon"
+              src={fightIcon}
+              alt="player vs player icon"
               className="menu-link-icon"
             />
           </Link>
         </div>
-
-        <Link
-          to="/gamescreen"
-          className="menu-link rufeus-bg-clr black-text-clr"
-          onClick={humanOpponent}
-          onMouseEnter={MouseOverFight}
-          onMouseLeave={MouseOutFight}
-        >
-          Local
-          <img
-            src={fightIcon}
-            alt="player vs player icon"
-            className="menu-link-icon"
-          />
-        </Link>
       </div>
-    </div>
   );
 };
 

@@ -17,10 +17,14 @@ const initialState = {
   isAnimationInProgress: false,
   isWinnerDeclared: false,
   isDraw: false,
+  recentMove: [0,0],
   pieces: [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   ],
+  nbGame: 0,
+  width: 7,
+  height: 6,
 };
 
 const AppProvider = ({ children }) => {
@@ -56,9 +60,17 @@ const AppProvider = ({ children }) => {
     const divArr = [];
     for (let i = 0; i < 42; i++) {
       const div = document.createElement("div");
+      div.setAttribute('data-placed', 'false');
       divArr.push(div);
     }
     return divArr;
+  };
+
+  const updatePlayerTurn = () => {
+    // Updates the pieces state variable
+    dispatch({
+      type: "UPDATE_TURN_STATE",
+    });
   };
 
   const updatePieces = (indexToUpdate, player) => {
@@ -66,6 +78,14 @@ const AppProvider = ({ children }) => {
     dispatch({
       type: "UPDATE_PIECES_STATE",
       payload: { indexToUpdate, player },
+    });
+  };
+
+  const updateRecentMove = (index, player) => {
+    // Updates the pieces state variable
+    dispatch({
+      type: "UPDATE_RECENT_MOVE",
+      payload: { index, player },
     });
   };
 
@@ -202,6 +222,58 @@ const AppProvider = ({ children }) => {
     return false;
   };
 
+  const isWinnableMove = (player, pieces, column) => {
+    // returns true if there is a winning row of 4 game pieces
+      // check horizontal win starting at index
+    if (
+      column % 7 < 4 &&
+      pieces[column] === player &&
+      pieces[column + 1] === player &&
+      pieces[column + 2] === player &&
+      pieces[column + 3] === player
+    ) {
+
+      return true;
+    }
+
+    // check vertical win starting at index
+    if (
+      column < 21 &&
+      pieces[column] === player &&
+      pieces[column + 7] === player &&
+      pieces[column + 14] === player &&
+      pieces[column + 21] === player
+    ) {
+      return true;
+    }
+
+    // check diagonal win starting at index
+    if (
+      column % 7 < 4 &&
+      column < 18 &&
+      pieces[column] === player &&
+      pieces[column + 8] === player &&
+      pieces[column + 16] === player &&
+      pieces[column + 24] === player
+    ) {
+      return true;
+    }
+
+    // check diagonal win starting at the opposite direction
+    if (
+      column % 7 >= 3 &&
+      column < 21 &&
+      pieces[column] === player &&
+      pieces[column + 6] === player &&
+      pieces[column + 12] === player &&
+      pieces[column + 18] === player
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
   const addPointToScore = (player) => {
     if (player === 1) {
       dispatch({ type: "ADD_POINT_TO_RED" });
@@ -328,13 +400,8 @@ const AppProvider = ({ children }) => {
     boardColumn.appendChild(indicator);
   };
 
-  const handlePlayerMove = (e, column) => {
-    // handles placing a piece on the board after a player clicks a column with available slots in it
-    if (state.isWinnerDeclared) {
-      e.preventDefault();
-      return;
-    }
 
+  const updateBoardAfterPlay = (column, player) => {
     let gameboard = document.querySelector(".gameboard");
     let availableRow = getFirstAvailableRow(state.pieces, column);
 
@@ -346,9 +413,10 @@ const AppProvider = ({ children }) => {
     let indexToUpdate = availableRow * 7 + column;
 
     // 1= red 2 = yellow
-    let player = state.isRedTurn ? 1 : 2;
+    // let player = state.isRedTurn ? 1 : 2;
 
     updatePieces(indexToUpdate, player);
+    state.nbGame++;
 
     let boardColumn = gameboard.children[indexToUpdate];
     let gamePiece = document.createElement("div");
@@ -356,15 +424,32 @@ const AppProvider = ({ children }) => {
     gamePiece.dataset.placed = true;
     gamePiece.dataset.player = player;
     boardColumn.appendChild(gamePiece);
+    // against the pc, sometimes it moves too fast, before the code is rendered
+    try{
+      let unplacedGamePiece = document.querySelector("[data-placed='false']");
+      let unplacedY = unplacedGamePiece.getBoundingClientRect().y;
+      let placedY = gamePiece.getBoundingClientRect().y;
+      let yDiff = unplacedY - placedY;
 
-    let unplacedGamePiece = document.querySelector("[data-placed='false']");
-    let unplacedY = unplacedGamePiece.getBoundingClientRect().y;
-    let placedY = gamePiece.getBoundingClientRect().y;
-    let yDiff = unplacedY - placedY;
-
-    turnAnimationOn();
-    gamePieceDropAnimation(gamePiece, yDiff);
+      turnAnimationOn();
+      gamePieceDropAnimation(gamePiece, yDiff);
+    }catch(e){
+      // against the pc, sometimes it moves too fast, before the code is rendered
+    }
+    
     resetCounter();
+  }
+
+  const handlePlayerMove = (e, column) => {
+    // handles placing a piece on the board after a player clicks a column with available slots in it
+    if (state.isWinnerDeclared) {
+      e.preventDefault();
+      return;
+    }
+    let player = state.isRedTurn ? 1 : 2;
+    updateBoardAfterPlay(column, player);
+
+    
   };
 
   return (
@@ -396,6 +481,10 @@ const AppProvider = ({ children }) => {
         mouseOverColumnIndicator,
         handlePlayerMove,
         otherPlayerIsWinner,
+        isWinnableMove,
+        updateBoardAfterPlay,
+        updateRecentMove,
+        updatePlayerTurn,
       }}
     >
       {children}

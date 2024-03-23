@@ -1,11 +1,20 @@
 import React from "react";
 import Logo from "./Logo";
 import { useGlobalContext } from "../context";
+import { useSocket } from "./useSocket";
 
 const GameScreenHeader = () => {
-  const { openPauseMenu, restartGame } = useGlobalContext();
+  const socket = useSocket();
+  const { openPauseMenu, restartGame, isComputerPlaying, pieces, recentMove } = useGlobalContext();
   function restarting(){
     document.querySelector("body").style.backgroundColor = '#008080';
+    let data = {
+      cpu: isComputerPlaying, 
+      data: pieces, 
+      player_move: recentMove[0],
+      restarting_game: true,
+    };
+    socket.send(JSON.stringify(data));
     restartGame();
   }
   return (

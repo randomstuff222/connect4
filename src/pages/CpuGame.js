@@ -8,32 +8,72 @@ import RedTimer from "../components/RedTimer";
 import YellowTimer from "../components/YellowTimer";
 import { useGlobalContext } from "../context";
 import WinnerCard from "../components/WinnerCard";
-import { useEffect } from "react";
+import { useSocket } from "../components/useSocket";
+import { useEffect, useState } from "react";
 
-const Game = () => {
+const CpuGame = () => {
   const {
+    pieces, 
     isWinnerDeclared, 
-    displayWinnerName, 
     isRedTurn, 
+    updateBoardAfterPlay,
+    isComputerPlaying,
+    recentMove,
   } = useGlobalContext();
 
-  useEffect(() => {
-    if(isWinnerDeclared){
-      let winner = displayWinnerName();
-      if(winner === "you" || winner ==="player 1") document.querySelector("body").style.backgroundColor = '#fd6687';
-      if(winner ==="player 2") document.querySelector("body").style.backgroundColor = '#ffce67';
-      else document.querySelector("body").style.backgroundColor = '#008080';
-    }else{
-      document.querySelector("body").style.backgroundColor = '#008080';
-    }
-  }, [isWinnerDeclared]);
+  const [cpuMove, setCpuMove] = useState(null);
+  const [newMess, setNewMess] = useState(false);
+  const socket = useSocket();
 
+  useEffect(() => {
+    socket.addEventListener("message", (e) => {
+      e.preventDefault();
+      setCpuMove(e.data);
+      setNewMess(true);
+      
+    });
+    return () => {
+      socket.removeEventListener("message", (e) => {
+      });
+    }
+  },[socket]);
+
+  const cpuPlay = async (cpuMove) => {
+    updateBoardAfterPlay(cpuMove - 1, 2);
+    setNewMess(false);
+  };
+
+  useEffect(() => {
+    if(newMess){
+      cpuPlay(cpuMove);
+    }
+    }, [newMess]
+  );
+
+  useEffect(() => {
+    if(!isRedTurn && !isWinnerDeclared) {
+      let data = {
+        cpu: isComputerPlaying, 
+        data: pieces, 
+        player_move: recentMove[0],
+        restarting_game: false,
+      };
+ 
+      socket.send(JSON.stringify(data));
+    }
+  }, [isRedTurn, isWinnerDeclared]);
 
   useEffect(() => {
     const handleUnload = (event) => {
       // Display a confirmation message to the user
       event.preventDefault();
       event.returnValue = ''; // This line is needed for some browsers
+      socket.send(JSON.stringify({
+        cpu: isComputerPlaying, 
+        data: pieces, 
+        player_move: recentMove[0],
+        restarting_game: true,
+      }));
     };
 
     // Add event listener when the component mounts
@@ -63,4 +103,4 @@ const Game = () => {
   );
 };
 
-export default Game;
+export default CpuGame;

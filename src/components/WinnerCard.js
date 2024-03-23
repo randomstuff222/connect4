@@ -1,14 +1,18 @@
 import { useGlobalContext } from "../context";
+import { useSocket } from "./useSocket";
 
 const WinnerCard = () => {
-  const { displayWinnerName, startNewGame } = useGlobalContext();
-
-
-  // displayWinnerName() === "you" || "player 1" ? document.querySelector("body").style.backgroundColor = '#fd6687'
-  // : document.querySelector("body").style.backgroundColor = '#ffce67';
+  const { displayWinnerName, startNewGame, pieces, recentMove, isComputerPlaying } = useGlobalContext();
+  const socket = useSocket();
 
   function newGame(){
     document.querySelector("body").style.backgroundColor = '#008080';
+    socket.send(JSON.stringify({
+      cpu: isComputerPlaying, 
+      data: pieces, 
+      player_move: recentMove[0],
+      restarting_game: true,
+    }));
     startNewGame();
   }
 
