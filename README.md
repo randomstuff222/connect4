@@ -1,6 +1,4 @@
-# Frontend Mentor - Connect Four game solution
-
-This is a solution to the [Connect Four game challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/connect-four-game-6G8QVH923s).
+# Connect Four Game
 
 ## Table of contents
 
